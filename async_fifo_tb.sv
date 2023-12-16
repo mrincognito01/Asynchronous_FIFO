@@ -4,15 +4,30 @@ module async_fifo_tb;
     logic [WIDTH-1:0]in;
     logic wr_clk;
     logic rd_clk;
-    logic wr_reset;
-    logic rd_reset;
+    logic wr_reset_n;
+    logic rd_reset_n;
     logic wr_en;
     logic rd_en;
     logic full;
     logic empty;
     logic [WIDTH-1:0]out;
 
-    async_fifo uut(.in(in),.wr_clk(wr_clk),.rd_clk(rd_clk),.wr_reset(wr_reset),.rd_reset(rd_reset),.wr_en(wr_en),.rd_en(rd_en),.full(full),.empty(empty),.out(out));
+    async_fifo #(
+        .WIDTH(WIDTH)
+        .DEPTH(DEPTH)
+    )
+    fifo(
+        .in(in),
+        .wr_clk(wr_clk),
+        .rd_clk(rd_clk),
+        .wr_reset(wr_reset_n),
+        .rd_reset(rd_reset_n),
+        .wr_en(wr_en),
+        .rd_en(rd_en),
+        .full(full),
+        .empty(empty),
+        .out(out)
+    );
 
     initial begin
         wr_clk='b0;
@@ -25,11 +40,11 @@ module async_fifo_tb;
     end
 
     initial begin
-        wr_reset='b1;
-        rd_reset='b1;
-        #15;
         wr_reset='b0;
         rd_reset='b0;
+        #15;
+        wr_reset='b1;
+        rd_reset='b1;
         
         
 
