@@ -25,10 +25,7 @@ module async_fifo #(parameter WIDTH=8,DEPTH=16)
     assign empty_v = (rd_ptrg==rd_sync);
 
    
-
-
-   generate
-       begin
+    //////////////////////// WRITE BLOCK ////////////////////////
 
            assign wr_ptrb = wr_ptr + (wr_en && !full);
            assign wr_ptrg = (wr_ptrb >> 'b1) ^ (wr_ptrb);
@@ -57,12 +54,10 @@ module async_fifo #(parameter WIDTH=8,DEPTH=16)
                end
            end
 
-       end
-   endgenerate
 
+   //////////////////////// READ BLOCK ////////////////////////
 
-   generate
-       begin
+    
         
            assign rd_ptrb = rd_ptr + (rd_en && !empty);
            assign rd_ptrg = (rd_ptrb >> 'b1) ^ (rd_ptrb);
