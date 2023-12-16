@@ -1,4 +1,7 @@
-module async_fifo #(parameter WIDTH=8,DEPTH=16)
+module async_fifo #(
+    parameter WIDTH=8,
+    parameter DEPTH=16
+)
     (   input logic [WIDTH:0]in,
         input logic wr_clk,
         input logic rd_clk,
@@ -8,7 +11,8 @@ module async_fifo #(parameter WIDTH=8,DEPTH=16)
         input logic rd_en,
         output logic full,
         output logic empty,
-        output logic [WIDTH:0]out);
+        output logic [WIDTH:0]out
+    );
 
     logic [WIDTH-1:0]mem[DEPTH-1:0];
     
@@ -36,7 +40,8 @@ module async_fifo #(parameter WIDTH=8,DEPTH=16)
                if(!wr_reset)
                begin
                    wr_ptr               <=       'b0;
-                   mem                  <=       '{default:'b0};
+                   for(int i=0;i<DEPTH;i++)
+                       mem[i]           <=       'b0;
                    wr_g                 <=       'b0;
                    wr_temp              <=       'b0;
                    full                 <=       'b0;
@@ -79,9 +84,7 @@ module async_fifo #(parameter WIDTH=8,DEPTH=16)
                begin
                    {rd_ptr,rd_g}         <=     {rd_ptrb,rd_ptrg};
                    {rd_sync,rd_temp}     <=     {rd_temp,wr_g};
-                   rd_sync               <=     rd_temp;
                    empty                 <=     empty_v;
-                   if(rd_en && !empty)
                     out                  <=     mem[rd_addr];
                end
            end
